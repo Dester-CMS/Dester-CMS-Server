@@ -31,7 +31,7 @@ app.get(`/movies`, (req, res) => {
     .then(({ data }) => {
         const externalItems = data.map(({ tmdb_id }) => {
             return axios
-            .get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}`)
+            .get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
             .then(({ data }) => {
             return data;
             });
@@ -64,7 +64,7 @@ app.get(`/movies_featured`, (req, res) => {
     .then(({ data }) => {
         const externalItems = data.map(({ tmdb_id }) => {
             return axios
-            .get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}`)
+            .get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
             .then(({ data }) => {
             return data;
             });
@@ -86,7 +86,7 @@ app.get(`/series`, (req, res) => {
     .then(({ data }) => {
         const externalItems = data.map(({ tmdb_id }) => {
             return axios
-            .get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}`)
+            .get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
             .then(({ data }) => {
             return data;
             });
@@ -119,7 +119,7 @@ app.get(`/series_featured`, (req, res) => {
     .then(({ data }) => {
         const externalItems = data.map(({ tmdb_id }) => {
             return axios
-            .get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}`)
+            .get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
             .then(({ data }) => {
             return data;
             });
