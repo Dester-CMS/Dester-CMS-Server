@@ -2,7 +2,6 @@ const PORT = 4000
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const { auth, requiresAuth } = require('express-openid-connect');
 require('dotenv').config()
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3/";
@@ -14,18 +13,7 @@ var corsOptions = {
     optionsSuccessStatus: 200
 }
 
-const config = {
-    authRequired: false,
-    auth0Logout: true,
-    secret: process.env.DESTER_AUTH0_SECRET,
-    baseURL: process.env.DESTER_AUTH0_BASEURL,
-    clientID: process.env.DESTER_AUTH0_CLIENTID,
-    issuerBaseURL: process.env.DESTER_AUTH0_ISSUER_BASEURL
-};
-
 app.use(cors(corsOptions));
-
-app.use(auth(config));
 
 app.get(`/`, (req, res) => {
     res.json({
