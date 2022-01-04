@@ -1,0 +1,46 @@
+{
+    "version": 2,
+    "builds": [
+        { 
+            "src": "*.js",
+            "use": "@vercel/node" 
+        }
+    ],
+    "routes": [
+        {
+            "src": "/",
+            "dest": "/server.js",
+            "methods": ["GET"]
+        },
+        {
+            "src": "/movies",
+            "dest": "/server.js",
+            "methods": ["GET"]
+        },
+        {
+            "src": "/movie/(?<tmdb_id>[^/]*)",
+            "dest": "/server.js",
+            "methods": ["GET"]
+        },
+        {
+            "src": "/movies_featured",
+            "dest": "/server.js",
+            "methods": ["GET"]
+        },
+        {
+            "src": "/series",
+            "dest": "/server.js",
+            "methods": ["GET"]
+        },
+        {
+            "src": "/serie/(?<tmdb_id>[^/]*)",
+            "dest": "/server.js",
+            "methods": ["GET"]
+        },
+        {
+            "src": "/series_featured",
+            "dest": "/server.js",
+            "methods": ["GET"]
+        }
+    ]
+}
