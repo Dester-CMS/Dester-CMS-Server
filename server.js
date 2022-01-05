@@ -9,7 +9,7 @@ const TMDB_BASE_URL = "https://api.themoviedb.org/3/";
 const app = express();
 
 var corsOptions = {
-    origin: process.env.DESTER_FRONTEND_URL,
+    origin: '*',
     optionsSuccessStatus: 200
 }
 
@@ -31,7 +31,7 @@ app.get(`/movies`, (req, res) => {
     .then(({ data }) => {
         const externalItems = data.map(({ tmdb_id }) => {
             return axios
-            .get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
+            .get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images`)
             .then(({ data }) => {
             return data;
             });
@@ -47,24 +47,13 @@ app.get(`/movies`, (req, res) => {
     });
 });
 
-app.get(`/movie/:tmdb_id`, (req, res) => {
-    const tmdb_id = req.params.tmdb_id;
-    axios.get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
-    .then(function (response) {
-        res.json(response.data);
-    })
-    .catch((err) => {
-        res.json(err[Object.keys[0]]);
-    });
-});
-
 app.get(`/movies_featured`, (req, res) => {
     axios
     .get(`${process.env.DESTER_BACKEND_URL}/movies?featured=true`)
     .then(({ data }) => {
         const externalItems = data.map(({ tmdb_id }) => {
             return axios
-            .get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
+            .get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images`)
             .then(({ data }) => {
             return data;
             });
@@ -80,13 +69,46 @@ app.get(`/movies_featured`, (req, res) => {
     });
 });
 
+app.get(`/movie/:tmdb_id`, (req, res) => {
+    const tmdb_id = req.params.tmdb_id;
+    axios.get(`${TMDB_BASE_URL}movie/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=credits,videos`)
+    .then(function (response) {
+        res.json(response.data);
+    })
+    .catch((err) => {
+        res.json(err[Object.keys[0]]);
+    });
+});
+
 app.get(`/series`, (req, res) => {
     axios
     .get(`${process.env.DESTER_BACKEND_URL}/series?_sort=createdAt:DESC`)
     .then(({ data }) => {
         const externalItems = data.map(({ tmdb_id }) => {
             return axios
-            .get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
+            .get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images`)
+            .then(({ data }) => {
+            return data;
+            });
+        });
+        Promise
+        .all(externalItems)
+        .then(externalItems => {
+            res.json(externalItems);
+        })
+        .catch((err) => {
+            res.json(err[Object.keys[0]]);
+        });
+    });
+});
+
+app.get(`/series_featured`, (req, res) => {
+    axios
+    .get(`${process.env.DESTER_BACKEND_URL}/series?featured=true`)
+    .then(({ data }) => {
+        const externalItems = data.map(({ tmdb_id }) => {
+            return axios
+            .get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images`)
             .then(({ data }) => {
             return data;
             });
@@ -104,34 +126,12 @@ app.get(`/series`, (req, res) => {
 
 app.get(`/serie/:tmdb_id`, (req, res) => {
     const tmdb_id = req.params.tmdb_id;
-    axios.get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
+    axios.get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=credits,videos`)
     .then(function (response) {
         res.json(response.data);
     })
     .catch((err) => {
         res.json(err.message);
-    });
-});
-
-app.get(`/series_featured`, (req, res) => {
-    axios
-    .get(`${process.env.DESTER_BACKEND_URL}/series?featured=true`)
-    .then(({ data }) => {
-        const externalItems = data.map(({ tmdb_id }) => {
-            return axios
-            .get(`${TMDB_BASE_URL}tv/${tmdb_id}?api_key=${process.env.DESTER_TMDB_API_KEY}&append_to_response=images,videos`)
-            .then(({ data }) => {
-            return data;
-            });
-        });
-        Promise
-        .all(externalItems)
-        .then(externalItems => {
-            res.json(externalItems);
-        })
-        .catch((err) => {
-            res.json(err[Object.keys[0]]);
-        });
     });
 });
 
