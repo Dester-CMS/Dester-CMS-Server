@@ -13,6 +13,11 @@
             "methods": ["GET"]
         },
         {
+            "src": "/home",
+            "dest": "/server.js",
+            "methods": ["GET"]
+        },
+        {
             "src": "/movies",
             "dest": "/server.js",
             "methods": ["GET"]
