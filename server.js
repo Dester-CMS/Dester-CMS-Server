@@ -9,7 +9,7 @@ const TMDB_BASE_URL = "https://api.themoviedb.org/3/";
 const app = express();
 
 let corsOptions = {
-    origin: process.env.DESTER_FRONTEND_URL,
+    origin: `${process.env.DESTER_FRONTEND_URL}`,
     optionsSuccessStatus: 200
 }
 
